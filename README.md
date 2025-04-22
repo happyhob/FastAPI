@@ -1,0 +1,2 @@
+# fastAPI
+practice fastapi

@@ -1,0 +1,37 @@
+1. 가장 먼저 해야할 일은 폴더 내에 가상환경을 설정하는 일, FastAPI에 대한 종속성을 다운로드 수 있는 환경.
+    >> python -m venv venv
+
+2. venv로 들어감
+    >> cd venv/Scripts
+    >> activate     //명령을 활성화 한다
+
+3.가상환경에 설치된 파일 보기
+    >> pip list
+    >> python.exe -m pip install --upgrade pip
+
+4. fastAPi에 대한 설치 파일
+
+    >> pip install fastapi
+    >> pip install uvicorn
+
+5. 파일 패키지를 한 번에 설치하는 방법
+    -requirements.txt에 설치 패키지 명을 넣어놓는다.
+        >> pip install -r requirements.txt
+
+------------------------------------------------------------------
+
+GET :READ RESOURCE
+POST : CREATE RESOURCE
+PUT : UPDATE/ REPLACE RESOURCE
+DELETE : DELETE RESOURCE
+
+
+
+실행시킬 때:
+>> uvicorn books:app --reload
+
+
+swagger UI를 제공:
+http://127.0.0.1:8000/docs
+
+HTTP 예외처리를 사용하면 Pydantic이 포착하지 못할 수 있는 비즈니스 로직을 사용하여 생성한 오류를 잡을 수 있다.
