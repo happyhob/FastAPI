@@ -29,4 +29,28 @@
 
 ---
 
+📦 Database - SQLite
+이 프로젝트는 가볍고 내장형 데이터베이스인 SQLite를 사용합니다.
+SQLite는 서버를 별도로 설치할 필요 없이 파일 기반으로 작동하며, 빠르고 안정적인 데이터 관리를 제공합니다.
+
+🔹 특징
+경량: 추가 설치 없이 사용 가능한 내장형 DB
+
+파일 기반: .db 파일 하나로 전체 데이터 관리 가능
+
+SQL 지원: 표준 SQL 문법 사용 가능
+
+로컬 개발에 최적화: 소규모 애플리케이션, 프로토타입, 테스트에 적합
+
+🔹 사용 목적
+SQLite는 개발 초기 단계에서 빠르게 데이터 흐름을 테스트하고, 별도의 DB 환경 없이 손쉽게 배포 및 공유할 수 있도록 도와줍니다.
+
+[SQLite3 Site](https://www.sqlite.org/download.html)
+Precompiled Binaries for Windows >> A bundle of command-line tools for managing SQLite database files, including (1) the command-line shell, (2) sqldiff.exe, (3) sqlite3_analyzer.exe, and (4) sqlite3_rsync.exe. 64-bit.
+download!!
+
+
 > 📌 지속적으로 업데이트하며 학습 내용을 추가할 예정입니다.
+
+
+
