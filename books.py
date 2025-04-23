@@ -14,6 +14,7 @@ class Book(BaseModel):
 
 BOOKS = []
 
+'''
 @app.get("/")
 def read_api1():
     return {'wellcome':'eric'}
@@ -21,7 +22,7 @@ def read_api1():
 @app.get("/{name}")
 def read_api2(name:str):
     return {'wellcome':name}
-
+'''
 @app.get("/book")
 def read_api3():
     return BOOKS
@@ -48,4 +49,17 @@ def update_book(book_id:UUID, book: Book):
     raise HTTPException(
         status_code=404,
         detail=f"ID {book_id}: Does not exist"
+    )
+
+@app.delete("/{book_id}")
+def delete_book(book_id:UUID):
+    counter =0
+    for x in BOOKS:
+        if x.id == book_id:
+            del BOOKS[counter -1]
+            return f"ID: {book_id} deleted"
+    
+    raise HTTPException(
+        status_code=404,
+        detail = f"ID : {book_id}: Does not exist"
     )
