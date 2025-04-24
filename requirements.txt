@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+# python -m pip install "pymongo[srv]"==3.11
+
+
+'''DNS python 오류가 발생할 수 있기 떄문에 설정'''
+pymongo[srv]
