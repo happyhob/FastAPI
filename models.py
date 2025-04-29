@@ -8,8 +8,8 @@ from database import Base
 class Questions(Base):
     __tablename__ = 'questions'
 
-    id = Column(Integer, primery_key =True, index= True)
-    qusetion_text = Column(String, index =True)
+    id = Column(Integer, primary_key =True, index= True)
+    question_text = Column(String, index =True)
 
 class Choices(Base):
     __tablename__ ='choices'
