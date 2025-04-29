@@ -53,23 +53,6 @@ uvicorn main:app --reload
 
 ---
 
-## 💻 사용 예시
-
-```sql
--- 테이블 생성
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- 데이터 삽입
-INSERT INTO users (name, email) VALUES ('홍길동', 'hong@example.com');
-
--- 데이터 조회
-SELECT * FROM users WHERE name = '홍길동';
-```
 
 ## ⬇️설치방법
 [설치사이스](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
