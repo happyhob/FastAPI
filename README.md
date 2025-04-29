@@ -3,7 +3,18 @@
 PostgreSQL은 오픈 소스 객체-관계형 데이터베이스 관리 시스템(RDBMS)입니다. 안정성, 확장성, 표준 준수, 커뮤니티 중심 개발로 널리 사용되며, 강력한 기능과 유연한 확장성을 제공합니다.
 
 ---
+## 코드 실행
+[자신의 postgresql 정보로 변경!!]
+database.py : URL_DATABASE = ''postgresql://[USERNAME]:[PASSWORD]@localhost:5432/[DATABASENAME]'
 
+[패키기 설치]
+pip install sqlalchemy fastapi uvicorn pydantic
+
+[터미널에 실행문 입력]
+uvicorn main:app --reload
+
+
+실행 문
 ## 🔑 주요 특징
 
 - **오픈 소스**  
