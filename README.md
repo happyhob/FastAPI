@@ -69,7 +69,7 @@ INSERT INTO users (name, email) VALUES ('홍길동', 'hong@example.com');
 
 -- 데이터 조회
 SELECT * FROM users WHERE name = '홍길동';
-
+```
 
 ## ⬇️설치방법
 [설치사이스](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
