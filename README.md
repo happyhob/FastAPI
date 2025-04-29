@@ -15,17 +15,17 @@ PostgreSQL과 FastAPI를 연동하여 실행하는 방법을 안내합니다.
 
 ```bash
 pip install sqlalchemy fastapi uvicorn pydantic
-
+```
 ### 2. 🛠 데이터베이스 연결 설정
 database.py 파일에서 아래 내용을 자신의 PostgreSQL 정보로 수정합니다:
 # database.py
 ```python
 URL_DATABASE = 'postgresql://[USERNAME]:[PASSWORD]@localhost:5432/[DATABASENAME]'
-
+```
 ### 3. ▶️ 서버 실행
 ```bash
 uvicorn main:app --reload
-
+```
 
 
 ## 🔑 주요 특징
