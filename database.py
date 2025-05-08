@@ -9,11 +9,11 @@ SQLAlchemy에서 사용하는 ORM(Object Relational Mapping) 기능 중 하나�
 
 '''
 
-URL_DATABASE =''
+URL_DATABASE ='mysql+pymysql://root:test1234!@localhost:3306/BlogApplication'
 
 engine = create_engine(URL_DATABASE)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bine=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 '''

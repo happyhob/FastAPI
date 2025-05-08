@@ -4,7 +4,7 @@ ORM인 SQL Alchemy가 MySQL 데이터베이스에 필요한 테이블을 만들 
 열이 있는 필요한 데이터베이스 테이블을 초기화하고 인스턴스화 한다.
 '''
 
-from sqlalchemy import Bloolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 from database import Base
 
 
