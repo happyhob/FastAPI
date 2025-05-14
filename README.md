@@ -62,7 +62,7 @@ app.add_middleware(
 
 '''
 
-'''css
+```
 project-root/
 │
 ├── backend/
@@ -73,4 +73,4 @@ project-root/
 │   └── (create-react-app으로 생성된 폴더)
 │
 └── README.md
-'''
+```
