@@ -11,4 +11,4 @@ class Transaction(Base):
     category= Column(String)
     description= Column(String)
     is_income= Column(Boolean)
-    data = Column(String)
+    date = Column(String)

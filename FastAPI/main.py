@@ -37,6 +37,9 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins =origins,
+    allow_credentials =True,
+    allow_methods=['*'],
+    allow_headers=['*']
 )
 
 
@@ -45,7 +48,7 @@ class TransactionBase(BaseModel):
     category: str
     description: str
     is_income: bool
-    data:str
+    date:str
 
 class TransactionModel(TransactionBase):
     id: int
@@ -79,7 +82,7 @@ async def create_transaction(transaction: TransactionBase, db: db_dependency):
     return db_transaction
 
 
-@app.get("/transactions", response_model = List[TransactionModel])
+@app.get("/transactions/", response_model = List[TransactionModel])
 async def read_transactions(db: db_dependency, skip: int =0, limit: int = 100):
     transactions = db.query(models.Transaction).offset(skip).limit(limit).all()
     return transactions
