@@ -23,8 +23,9 @@
   ```
 
 
-  ✅ 백엔드 (FastAPI)
+✅ 백엔드 (FastAPI)
 1. 가상 환경 설정 (선택 사항)
+
 
 ```bash
 python -m venv venv
