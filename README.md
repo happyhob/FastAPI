@@ -20,32 +20,32 @@
    npx create-react-app your-folder-name
    cd your-folder-name
    npm start
-  '''
+  ```
 
 
   ✅ 백엔드 (FastAPI)
 1. 가상 환경 설정 (선택 사항)
 
-'''bash
+```bash
 python -m venv venv
 source venv/bin/activate  # Windows는 venv\Scripts\activate
-'''
+```
 
 2. 필수패키지 설치
-'''bash
+```bash
 pip install fastapi pydantic uvicorn sqlalchemy
-'''
+```
 
-3. 서버 실행
-'''bash
+4. 서버 실행
+```bash
 uvicorn main:app --reload
 
-'''
+```
 
 🔒 CORS 설정
 React 프론트엔드와 FastAPI 백엔드가 다른 도메인/포트에서 실행되므로 CORS(Cross-Origin Resource Sharing) 설정이 필요합니다.
 
-'''python
+```python
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
@@ -60,7 +60,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-'''
+```
 
 ```
 project-root/
