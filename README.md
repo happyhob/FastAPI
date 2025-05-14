@@ -16,11 +16,12 @@
 
 2. **React 프로젝트 생성**
 
-   ```bash
-   npx create-react-app your-folder-name
-   cd your-folder-name
-   npm start
-  ```
+```bash
+npx create-react-app your-folder-name
+cd your-folder-name
+npm start
+```
+
 
 
 ✅ 백엔드 (FastAPI)
@@ -32,12 +33,12 @@ python -m venv venv
 source venv/bin/activate  # Windows는 venv\Scripts\activate
 ```
 
-2. 필수패키지 설치
+2. 필수패키지 설치 
 ```bash
 pip install fastapi pydantic uvicorn sqlalchemy
 ```
 
-4. 서버 실행
+3. 서버 실행
 ```bash
 uvicorn main:app --reload
 
