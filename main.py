@@ -16,3 +16,9 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session,Depends(get_db)]
+
+@app.get("/",status_code=status.HTTP_200_OK)
+async def user(user:None, db:db_dependency):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Fails')
+    return {"User": user}
