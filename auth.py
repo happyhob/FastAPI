@@ -41,6 +41,29 @@ hashed_password = bcrypt_context.hash("plain_password")
 
 # 비밀번호 검증
 is_valid = bcrypt_context.verify("plain_password", hashed_password)
+
+
+deprecated='auto' : 어떤 해시 알고리즘을 더 이상 기본으로 사용하지 않을 것인지 자동으로 판단하게 함
+                    향후 알고리즘 교체/ 마이그레이션 전략에 유용용
+
+
+bcrypt: 비밀번호 저장용 안전한 해시 알고리즘즘
+
+SHA256는 빠르기 떄문에 공격자도 빠르게 시도를 할 수 있다. Salt가 없어서 같은 비밀번호는 같은 해시값이다.
+
+🔐 왜 bcrypt가 필요한가?
+    ✅ 일반적인 해시 함수(e.g. SHA256)는:
+
+        매우 빠르다 → 공격자도 빠르게 시도할 수 있음
+
+        salt가 없으면 같은 비밀번호는 같은 해시값 → rainbow table 공격에 취약
+
+    ✅ bcrypt는 다음과 같은 보안 기능을 제공:
+
+        기능	            설명
+        Salt 내장:       무작위 salt 자동 추가 → 해시 중복 방지
+        느린 계산 속도:   고의로 느리게 처리 → 공격자가 빠르게 추측 시도 못 함
+        Cost 설정 가능:	 rounds나 cost 값을 조정하여 연산량 조절 가능
 '''
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='/auth/token')    
@@ -62,9 +85,11 @@ from fastapi import Depends
 async def protected_route(token: str = Depends(oauth2_bearer)):
     return {"token": token}
 
+✅결론 : 
+    `OAuth2PasswordBearer`는 단순히 헤더에서 토큰 문자열만 추출해줄 뿐!
 
 '''
-# 토큰은 곧 생성할 api앤드포인트가 될 것이기 떄문에 off토큰이다
+
 class CreateUserRequest(BaseModel):
     username:str
     password : str
@@ -122,19 +147,20 @@ create_user_model = Users(
 '''
 
 
+# Annotated : 타입에 추가적인 메타데이터(부가 정보)를 붙임 , OAuth2PasswordRequestForm타입에, 의존성 주입을 Annotated 통해 하나로 묶음
 @router.post("/token", response_model = Token)
-async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-                                 db:db_dependency):
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db:db_dependency):
     user = authenticate_user(form_data.username, form_data.password, db)
 
     if not user:
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
                             detail = 'Could not validate user.')
+    
     token = create_access_token(user.username, user.id, timedelta(minutes=20))  #imedelta(minutes=20): 20분 동안 토큰이 유지 된다. 이후에는 재로그인 해야함
 
     return {'access_token':token, 'token_type':'bearer'}
 
-
+# 사용자 정보 검증!
 def authenticate_user(username: str, password: str, db):
     user = db.query(Users).filter(Users.username == username).first()
 
@@ -144,22 +170,43 @@ def authenticate_user(username: str, password: str, db):
         return False
     return user
 
-#서버 - 클라이언트 ACCESS 토큰 생성
-def create_access_token(username:str, user_id: int, expires_delta: timedelta):
-    encode = {'sub':username, 'id': user_id}
-    expires = datetime.now(timezone.utc) + expires_delta        #현재 시간과  + 20분의 시가을 더함
-    encode.update({'exp':expires})
+# JWT Access Token 생성 함수
+def create_access_token(username: str, user_id: int, expires_delta: timedelta):
+    # 1. JWT Payload 기본 구성 (사용자 정보 포함)
+    encode = {
+        'sub': username,  # subject: 사용자 이름
+        'id': user_id     # 사용자 고유 ID
+    }
+    # 2. 만료 시간 계산 (현재 시간 + expires_delta)
+    expires = datetime.now(timezone.utc) + expires_delta  # UTC 기준으로 20분 등 더하기
+    # 3. payload에 만료 시간 추가
+    encode.update({'exp': expires})  # exp는 JWT의 표준 claim 중 하나 (expiration time)
+    # 4. JWT 토큰 생성 및 반환 (SECRET_KEY로 서명)
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
+
+#현재 로그인 된 사용자를 가져옴
 async def get_current_user(token: Annotated[str,Depends(oauth2_bearer)]):
     try:
+        # 1. 전달받은 JWT 토큰을 디코딩하여 payload(내용물)를 추출
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        user_id: int = payload.get('id')
+        
+        # 2. payload에서 username과 user_id를 꺼냄
+        username: str = payload.get("sub")  # subject (보통 사용자 이름)
+        user_id: int = payload.get("id")    # 사용자 고유 ID
+        
+        # 3. 필수 정보가 없으면 예외 발생 → 인증 실패 처리
         if username is None or user_id is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail = 'Could not validate user.')
-        return {'username':username, 'id': user_id}
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate user."
+            )
+        
+        # 4. 유저 정보 반환 (보통 이후의 경로 함수에서 사용)
+        return {"username": username, "id": user_id}
+    
     except JWTError:
-        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
-                            detail='Could not validate user.')
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate user."
+        )

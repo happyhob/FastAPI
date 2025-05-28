@@ -23,7 +23,6 @@ DB에 데이터를 읽고 쓰기 위한 작업의 단위!
 app = FastAPI()
 app.include_router(auth.router) # auth.py에서 만든 라우터를 메인 애플리케이션에 틍록하는 작업
 
-
 models.Base.metadata.create_all(bind=engine)
 
 def get_db():
@@ -36,6 +35,8 @@ def get_db():
 db_dependency = Annotated[Session,Depends(get_db)]
 user_dependency = Annotated[dict,Depends(get_current_user)]
 
+
+#status_code=status.HTTP_200_OK : 경로에서 성공적으로 처리될 경우 반환되는 HTTP 상태코드(명시적으로 작성)
 @app.get("/",status_code=status.HTTP_200_OK)
 async def user(user:user_dependency, db:db_dependency):
     if user is None:
