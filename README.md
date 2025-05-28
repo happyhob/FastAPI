@@ -10,27 +10,22 @@
 
 ## 🧩 주요 파일 설명
 ### main.py
-FastAPI 앱을 생성하고 실행하는 메인 파일입니다.
-
-인증 라우터(auth.py)를 포함시키며, / 엔드포인트에서 인증 확인 기능을 제공합니다.
+- FastAPI 앱을 생성하고 실행하는 메인 파일입니다.
+- 인증 라우터(auth.py)를 포함시키며, / 엔드포인트에서 인증 확인 기능을 제공합니다.
 
 ### auth.py
 사용자 인증 관련 API가 정의된 라우터입니다.
 
-기능:
+#### 기능:
+    - 회원가입 (POST /auth/): 사용자 정보를 받아 DB에 저장
+    - 로그인 (POST /auth/token): 유저 인증 및 JWT 토큰 반환
+    - 토큰 검증 함수: 인증된 사용자만 접근 가능한 엔드포인트에서 사용 가능
 
-회원가입 (POST /auth/): 사용자 정보를 받아 DB에 저장
-
-로그인 (POST /auth/token): 유저 인증 및 JWT 토큰 반환
-
-토큰 검증 함수: 인증된 사용자만 접근 가능한 엔드포인트에서 사용 가능
-
-사용 기술:
-
-OAuth2PasswordBearer, JWT, passlib(비밀번호 해싱)
+#### 사용 기술:
+    - OAuth2PasswordBearer, JWT, passlib(비밀번호 해싱)
 
 ### models.py
-사용자 테이블을 정의하는 SQLAlchemy 모델이 포함되어 있습니다.
+- 사용자 테이블을 정의하는 SQLAlchemy 모델이 포함되어 있습니다.
 ```python
 class Users(Base):
     __tablename__ ='users'
@@ -48,7 +43,7 @@ SessionLocal = sessionmaker(bind=engine)
 ```
 
 ### note.txt
-인증 및 보안 관련 사용 모듈 설명이 포함된 문서입니다.
+- 인증 및 보안 관련 사용 모듈 설명이 포함된 문서입니다.
 
 설치 모듈 및 주요 기능 요약:
 | 모듈                          | 설명 및 사용 목적                           |
