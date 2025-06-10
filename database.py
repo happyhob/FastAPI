@@ -1,32 +1,29 @@
-'''(db 연동 페이지의 모듈 설명)
-    sqlalchemy: DataBase와 통신하기 위한 핵심 인터페이스
-        create_engine: DB연동을 위한 엔진 객체 생성
-    sessionmaker: SQLAlchemy에서 세션(데이터베이스와의 단일 트랜잭션)을 생성하기 위한 팩토리
-        > 여기서 세션은 쿼를 보내고 결과를 받아오는 역할을 한다.
-    from sqlalchemy.ext.declarative import declarative_base: ORM에서 모델(클래스)을 정의할 때 사용할 Base 클래스를 만들기 위한 함수
-        > Base 클래스를 상속받아 실제 테이블과 매핑되는 모델을 정의
-'''
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base     
 
-'''현재 디렉토리에 있는 books.db를 SQLite db로 사용하겠다.'''
-SQLALCHEMY_DATABASE_URL = "sqlite:///./books.db"
 
-'''
-    실제 SQLite에 접근할 수 있는 엔진 객체
-    SQLite는 기본적으로 동일한 스레드에서만 DB 접근을 허용하는데, 
-    이 옵션을 끄면 여러 스레드에서 같은 DB 세션을 사용할 수 있게 허용.
-    >>> FastAPI 같은 비동기 프레임워크에서 사용 시 자주 설정
-'''
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread":False}
-)
+SQLALCHEMY_DATABASE_URL ='sqlite:///./todosapp.db'
 
-'''engine을 바탕으로 세션을 만들 수 있는 팩토리 함수인 SessionLocal을 정의'''
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args = {'check_same_thread': False})
 
-'''모델 클래스들을 정의할 때 공통으로 상속받을 Base 클래스를 생성'''
+'''bind : Sqlalchemy에서 Session이 어떤 DB엔진과 연결될지를 지정하는 매개변수'''
+SessionLocal  = sessionmaker(autocommit = False, autoflush=False, bind = engine)
+
+
+#ORM(객체-관계 매핑)을 사용할 때 모든 모델 클래스의 부모(Base 클래스)를 생성하는 함수
+#Base는 모든 SQLAlchemy 모델 클래스가 상속받아야 하는 기본 클래스
+#이 Base를 상속받은 클래스는 SQLAlchemy에게 "이 클래스는 데이터베이스 테이블과 매핑되는 ORM 모델입니다"라고 알려주는 역할
 Base = declarative_base()
+
+
+'''
+| 요소                   | 설명                                    |
+| -------------------- | ------------------------------------- |
+| `declarative_base()` | SQLAlchemy 모델들의 부모 클래스 생성             |
+| `Base`               | 모델 정의 시 상속해야 하는 클래스                   |
+| `Base.metadata`      | 모든 모델의 테이블 메타데이터가 모여 있음               |
+| `Base.metadata.create_all()` | 실제 DB에 테이블을 만드는 명령      |
+| 목적                   | Python 클래스를 DB 테이블처럼 사용할 수 있게 함 (ORM) |
+
+'''

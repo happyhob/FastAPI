@@ -1,56 +1,79 @@
-# 🚀 FastAPI 학습 저장소
+# 🛡️ FastAPI 인증 기반 웹 애플리케이션
+이 프로젝트는 FastAPI 기반으로 제작된 간단한 사용자 인증 시스템입니다. SQLite 데이터베이스와 SQLAlchemy ORM을 사용하며, JWT 토큰을 활용한 로그인 인증 방식을 포함합니다.
 
-이 저장소는 **FastAPI**를 활용한 RESTful API 개발 학습 과정을 기록한 공간입니다.  
-공부는 Eric Roby의 유튜브 강의를 기반으로 진행하고 있습니다.  
-👉 [FastAPI 강좌 바로가기](https://www.youtube.com/playlist?list=PLK8U0kF0E_D6l19LhOGWhVZ3sQ6ujJKq_)
+## 📂 프로젝트 구조
+├── auth.py          # 사용자 생성, 로그인, 토큰 발급 및 인증 관련 라우터
+├── database.py      # 데이터베이스 연결 및 세션 설정
+├── main.py          # FastAPI 앱 실행 및 라우터 등록
+├── models.py        # SQLAlchemy 사용자 모델 정의
+├── note.txt         # 주요 모듈 설명 및 사용 예시
 
-## 📁 브랜치 구조
+## 🧩 주요 파일 설명
+### main.py
+- FastAPI 앱을 생성하고 실행하는 메인 파일입니다.
+- 인증 라우터(auth.py)를 포함시키며, / 엔드포인트에서 인증 확인 기능을 제공합니다.
 
-이 프로젝트는 Git 형상관리를 실습하기 위해 2개의 브랜치로 운영됩니다.
+### auth.py
+사용자 인증 관련 API가 정의된 라우터입니다.
 
-| 브랜치 이름 | 설명 |
-|-------------|------|
-| `desktop`   | 집에서 공부하는 환경 (주로 데스크탑 사용) |
-| `notebook`  | 외부에서 공부하는 환경 (노트북 활용) |
+#### 기능:
+    - 회원가입 (POST /auth/): 사용자 정보를 받아 DB에 저장
+    - 로그인 (POST /auth/token): 유저 인증 및 JWT 토큰 반환
+    - 토큰 검증 함수: 인증된 사용자만 접근 가능한 엔드포인트에서 사용 가능
 
-브랜치를 나누어 사용하는 이유는 `git pull`, `push`, `merge` 등의 Git 흐름을 학습하기 위함입니다.
+#### 사용 기술:
+    - OAuth2PasswordBearer, JWT, passlib(비밀번호 해싱)
 
-## 📌 학습 내용
+### models.py
+- 사용자 테이블을 정의하는 SQLAlchemy 모델이 포함되어 있습니다.
+```python
+class Users(Base):
+    __tablename__ ='users'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True)
+    hashed_password = Column(String)
 
-- FastAPI 기본 구조 이해
-- 엔드포인트 생성 및 라우팅
-- 요청 및 응답 처리 방식
-- Pydantic을 활용한 데이터 검증
-- Git 브랜치 전략 실습 (pull, push, merge 등)
+```
+### database.py
+SQLite 데이터베이스를 설정하고 SQLAlchemy 세션을 초기화합니다.
+```python
+SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(bind=engine)
+```
 
-## 📚 참고 자료
+### note.txt
+- 인증 및 보안 관련 사용 모듈 설명이 포함된 문서입니다.
 
-- YouTube 강좌: [FastAPI by Eric Roby](https://www.youtube.com/playlist?list=PLK8U0kF0E_D6l19LhOGWhVZ3sQ6ujJKq_)
-
----
-
-📦 Database - SQLite
-이 프로젝트는 가볍고 내장형 데이터베이스인 SQLite를 사용합니다.
-SQLite는 서버를 별도로 설치할 필요 없이 파일 기반으로 작동하며, 빠르고 안정적인 데이터 관리를 제공합니다.
-
-🔹 특징
-경량: 추가 설치 없이 사용 가능한 내장형 DB
-
-파일 기반: .db 파일 하나로 전체 데이터 관리 가능
-
-SQL 지원: 표준 SQL 문법 사용 가능
-
-로컬 개발에 최적화: 소규모 애플리케이션, 프로토타입, 테스트에 적합
-
-🔹 사용 목적
-SQLite는 개발 초기 단계에서 빠르게 데이터 흐름을 테스트하고, 별도의 DB 환경 없이 손쉽게 배포 및 공유할 수 있도록 도와줍니다.
-
-[SQLite3 Site](https://www.sqlite.org/download.html)
-Precompiled Binaries for Windows >> A bundle of command-line tools for managing SQLite database files, including (1) the command-line shell, (2) sqldiff.exe, (3) sqlite3_analyzer.exe, and (4) sqlite3_rsync.exe. 64-bit.
-download!!
-
-
-> 📌 지속적으로 업데이트하며 학습 내용을 추가할 예정입니다.
-
+설치 모듈 및 주요 기능 요약:
+| 모듈                          | 설명 및 사용 목적                           |
+| --------------------------- | ------------------------------------ |
+| `python-jose[cryptography]` | JWT 토큰 생성, 검증, 암호화 등 인증 처리           |
+| `passlib[bcrypt]`           | 비밀번호 해싱 및 로그인 시 검증 처리                |
+| `python-multipart`          | 파일 업로드 및 `multipart/form-data` 요청 처리 |
 
 
+## 🛠 설치 방법
+```bash
+pip install fastapi uvicorn pydantic
+pip install "python-jose[cryptography]"
+pip install "passlib[bcrypt]"
+pip install python-multipart
+
+```
+
+
+## ▶ 실행 방법
+```bash
+uvicorn main:app --reload
+```
+
+
+## 🔐 주요 기능 요약
+- JWT 기반 토큰 인증
+- 비밀번호 bcrypt 해싱 처리
+- FastAPI 라우터 분리 및 의존성 주입
+- SQLite 사용한 경량 데이터베이스 처리
+
+
+현재 변경된 것이 깃에 올라가는지 확인하는 중입니다.
