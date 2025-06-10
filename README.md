@@ -75,3 +75,5 @@ uvicorn main:app --reload
 - FastAPI 라우터 분리 및 의존성 주입
 - SQLite 사용한 경량 데이터베이스 처리
 
+
+현재 변경된 것이 깃에 올라가는지 확인하는 중입니다.
